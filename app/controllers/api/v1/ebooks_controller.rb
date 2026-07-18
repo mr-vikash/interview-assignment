@@ -55,6 +55,13 @@ module Api
         }
       end
 
+      def show
+        render json: {
+          success: true,
+          data: EbookSerializer.new(@ebook).as_json
+        }
+      end
+
       private
 
       def ebook_params
