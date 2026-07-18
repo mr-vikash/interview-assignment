@@ -30,4 +30,11 @@ class EbookService
    def find(id)
     Ebook.find(id)
   end
+
+  def destroy(id)
+    ebook = Ebook.find(id)
+    ebook.destroy
+
+    ebook
+  end
 end

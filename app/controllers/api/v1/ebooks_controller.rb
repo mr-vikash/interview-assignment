@@ -1,6 +1,7 @@
 module Api
   module V1
     class EbooksController < BaseController
+      before_action :set_ebook, only: [:show, :download, :destroy]
 
       def index
         ebooks = Ebook.order(created_at: :desc)
@@ -35,10 +36,8 @@ module Api
       end
 
       def download
-        ebook = EbookService.new.find(params[:id])
-
-        if ebook.file.attached?
-          redirect_to rails_blob_url(ebook.file, disposition: "attachment")
+        if @ebook.file.attached?
+          redirect_to rails_blob_url(@ebook.file, disposition: "attachment")
         else
           render json: {
             success: false,
@@ -47,10 +46,23 @@ module Api
         end
       end
 
+      def destroy
+        @ebook.destroy
+
+        render json: {
+          success: true,
+          message: "#{@ebook.title} deleted successfully."
+        }
+      end
+
       private
 
       def ebook_params
         params.permit(:title, :author, :file)
+      end
+
+      def set_ebook
+         @ebook = EbookService.new.find(params[:id])
       end
     end
   end
