@@ -34,6 +34,19 @@ module Api
         }
       end
 
+      def download
+        ebook = EbookService.new.find(params[:id])
+
+        if ebook.file.attached?
+          redirect_to rails_blob_url(ebook.file, disposition: "attachment")
+        else
+          render json: {
+            success: false,
+            message: "File not found"
+          }, status: :not_found
+        end
+      end
+
       private
 
       def ebook_params

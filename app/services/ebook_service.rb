@@ -26,4 +26,8 @@ class EbookService
       )
       .distinct
   end
+
+   def find(id)
+    Ebook.find(id)
+  end
 end
